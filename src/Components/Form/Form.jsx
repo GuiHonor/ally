@@ -1,26 +1,28 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Button from "../Button/Button";
-import { Input} from "../Field/Field";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import Select, { NonceProvider } from "react-select";
+import Select from "react-select";
 import { TextField } from "@mui/material";
 import makeAnimated from "react-select/animated";
+import { Button } from "@mui/material";
+import MaskedInput from "../Inputs/MaskedInput"
+
+
 
 
 const animatedComponents = makeAnimated();
 
 const phoneRegExp = "^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$"
 
-const validationForm = yup.object().shape({
+/*const validationForm = yup.object().shape({
     name: yup.string().max(50).required(),
     email: yup.string().email().required() ,
     phone: yup.string().required(),
     cpf: yup.string().required() 
-})
+})*/
 
 const borderForm = {
     display: "flex",
@@ -71,17 +73,14 @@ const styles = {
     }
 
 }
-const Form = () => {
-    const [isHovering, setIsHovering ] = useState(false);
-    
-    const {register, handleSubmit, reset } = useForm({
-        resolver: yupResolver(validationForm)
-    });
+const Form = () => {    
+    const {handleSubmit, reset, register, control } = useForm()
     
     const [dataCountries, setDataCountries] = useState([]);
     const [dataCities, setDataCities] = useState([]);
 
-    const [valueSelect, setValueSelect] = useState("")
+    const [maskValues, setMaskValues] = useState("");
+
 
     useEffect(() => {
             axios.get("https://amazon-api.sellead.com/country")
@@ -100,31 +99,24 @@ const Form = () => {
             })
             .catch(() => {  
                 console.log("deu errado")
+                
             })
                   
         },[])      
 
-    const countries = dataCountries.map(item => item.name_ptbr).sort();
 
+    const countries = dataCountries.map(item => item.name_ptbr).sort();
 
     const citiesWithComplement = dataCities.map(item => item.name_ptbr).filter((onlyCities) => onlyCities).sort() // remove nulls
     const onlyCities = (citiesWithComplement.map(item => item.split(",")[0])).map(item => item.split("-")[0])
     const citiesNoRep= [...new Set(onlyCities)]
 
-    const handleMouseLeave = () => {
-        setIsHovering(false);
-    }
-
-    const handleMouseEnter = () => {
-        setIsHovering(true);
-    }
-
-        const onSubmit = (event) => {
-            console.log(event);
-               
+        const onSubmit = (values) => {
+            const {name, email, phone, cpf, countries, cities } = values
+            console.log(name, email, phone, cpf, countries, cities);
+            reset();   
         }
 
-    
     return (
 
         <form onSubmit={handleSubmit(onSubmit) }>
@@ -133,23 +125,23 @@ const Form = () => {
 
                     <div style={borderForm}>
 
-                            <h2 style={titleStyle}>{`Suas Informações :)`}</h2>
+                            <h2 style={titleStyle}>{`Suas Informações`}</h2>
 
                             <TextField 
                                 type={"text"}             
-                                {...register('name')}
+                                {...register("name")}
                                 label="Nome Completo"
                                 variant="outlined"
                                 id="outlined-size-normal"
                                 style={{
                                     marginBottom: 15,
                                     width: 300
-                                }}  
+                                }}                          
                             />  
 
                             <TextField 
                                 type={"email"}   
-                                {...register('email')}
+                                {...register("email")}
                                 label="Email"
                                 variant="outlined"
                                 id="outlined-size-normal"
@@ -158,88 +150,95 @@ const Form = () => {
                                     marginBottom: 15
                                 }} 
                             />
-                            <TextField 
-                                type={"text"} 
-                                {...register('phone')}
-                                label="Telefone"
-                                variant="outlined"
-                                id="outlined-size-normal"
-                                style={{
-                                    marginBottom: 15
-                                }} 
+
+                            <MaskedInput
+                                type={"tel"}
+                                mask={"(99) 99999-9999"}
+                                value={maskValues}
+                                onChange={(event) => setMaskValues(event.target.value)}
+                                label={"Telefone"}  
+                                style={{marginBottom: 15}}
                             />
 
-                            <TextField 
-                                type={"text"} 
-                                {...register('cpf')}
-                                label="CPF"
-                                variant="outlined"
-                                size="normal"
-                                id="outlined-size-normal"
- 
+                            <MaskedInput
+                                type={"cpf"}
+                                mask={"999.999.999-99"}
+                                value={maskValues}
+                                onChange={(event) => setMaskValues(event.target.value)}
+                                label={"CPF"}  
                             />
-                            
+                      
+         
                     </div>
 
                     <div style={borderForm}>
 
                             <h2 style={titleStyle}>{`Quais são seus destinos de interesse? :)`}</h2>
-
-                            <Select 
-                            styles={styles}
-                            components = {animatedComponents}
-                            placeholder="Selecione os Países"
-                            isMulti
-                            options={countries.map(item => {
-                                return {
-                                    value: item,
-                                    label: item
-                                }
                             
+                            <Controller 
+                                name="countries"
+                                control={control} 
+                                defaultValue=""
+                                render={({ field }) => (
 
-                            })}/>
-                    
-                            <Select 
-                            styles={styles}
-                            components = {animatedComponents}
-                            placeholder="Selecione as Cidades"
-                            isMulti 
-                            options={citiesNoRep.map(item => {
-                                return {
-                                    value: item,
-                                    label: item
-                                }
-                            })}/>
+                                        <Select 
+                                            {...field}
+                                            styles={styles}
+                                            components = {animatedComponents}
+                                            placeholder="Selecione os Países"
+                                            isMulti
+                                            options={countries.map(item => {
+                                                return {
+                                                    value: item,
+                                                    label: item
+                                                }   
+                                            })}
+                                        
+                                        /> 
+                                )} 
+                            />
+                                
+                            <Controller
+                                name="cities"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (                                    
+                                         
+                                        <Select  
+                                            {...field}                                          
+                                            styles={styles}
+                                            components = {animatedComponents}
+                                            placeholder="Selecione as Cidades"
+                                            isMulti 
+                                            options={citiesNoRep.map(item => {
+                                                return {
+                                                    value: item,
+                                                    label: item
+                                                }
+                                            })}
+                                        />  
+                                )}
+                            />
 
+                            <Button 
+                                style={{width: 150, height: 45, fontSize: 17, position: "relative", bottom: -100}}
+                                text={'Enviar email'} 
+                                variant="contained"
+                                size="large"
+                                color="primary"
+                                type="submit"   
+                            >
                             
+                                Enviar
 
-                          
+                            </Button>
+
                     </div> 
-            
-            </div>   
-            <Button 
-                text={'Enviar email'} 
-                style={{
-                    display:"flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 260,
-                    height: 65,
-                    backgroundColor: "white",
-                    borderRadius: "15px",
-                    boxShadow: isHovering? "0px 5px 20px black": "",                                     
-                    cursor: "pointer"
-                }}
-                styleH1={{
-                    color: "#101935",
-                    fontWeight: "normal", 
-                    fontSize: 25, 
-                    letterSpacing: -2,}}
 
-                onMouseLeave={handleMouseLeave}
-                onMouseEnter={handleMouseEnter}
-                
-            />
+
+            </div>   
+
+            
                 
         </form>
         
