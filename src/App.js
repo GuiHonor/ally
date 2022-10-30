@@ -7,13 +7,14 @@ function App() {
   return (
     <>
     <GlobalStyle/>
-    <div className="App">
-       
-        <Header/>
-       
-        <Form></Form>
+    
+          <div className="App">
 
-    </div>
+              <Header/>
+
+              <Form></Form>
+
+          </div>
  
    </>
   );

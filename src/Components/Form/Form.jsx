@@ -1,95 +1,38 @@
 import "../Form/styleForm.css"
+import {
+    useState,
+    useForm,
+    Controller,
+    useEffect,
+    axios,
+    yup,
+    yupResolver,
+    Select,
+    TextField,
+    Button,
+    MaskedInput,
+    makeAnimated,
+    destiny,
+    selectStyle,
 
-import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
-import { useEffect } from "react";
-import * as yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup';
-import Select from "react-select";
-import { TextField } from "@mui/material";
-import makeAnimated from "react-select/animated";
-import { Button, Grid } from "@mui/material";
-import MaskedInput from "../Inputs/MaskedInput"
-
-
+} from "../../Imports/Imports"
 
 const animatedComponents = makeAnimated();
 
-const phoneRegExp = "^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$"
+const validationForm = yup.object().shape({
+    name: yup.string().required().max(50),
+    email: yup.string().required().max(50).email(),
+    phone: yup.string(),
+    cpf: yup.string(),   
+})
 
-/*const validationForm = yup.object().shape({
-    name: yup.string().max(50).required(),
-    email: yup.string().email().required() ,
-    phone: yup.string().required(),
-    cpf: yup.string().required() 
-})*/
-
-
-
-
-const styles = {
-    control: (styles) => ({...styles, 
-        marginBottom: 20, 
-        width: 500,
-        "@media (min-width: 320px) and (max-width: 767px)": {
-            width: 320
-            
-        },
-        "@media (min-width: 768px) and (max-width: 1024px)": { 
-            width: 630
-        },
-        "@media (min-width: 912px) and (max-width: 1024px)": {
-            width: 775,
-            height: 50
-        },
-        "@media (min-width: 1024px) and (max-width: 1366px)": {
-            width: 400,
-            height: 50
-        },
-        "@media (min-width: 1377px)": {
-            width: 500,
-            height: 50
-        },
-    
-    }),
-    multiValue: (styles) => {
-        return {
-            ...styles,
-            backgroundColor: "#9e9eff3d",
-            borderRadius: 5,
-            fontSize: 18,
-            color: "#0000ff76",
-            ':hover': {
-                color: "#0000ff"
-            },
-                     
-        }
-    },
-    multiValueLabel: (styles) => {
-        return {
-            ...styles,
-            color: "#0000ff",
-            
-        }
-    },
-    multiValueRemove: (styles) => {
-        return {
-            ...styles,
-            cursor: "pointer",
-            ':hover': {
-                color: "none"
-            }
-        }
-    }
-
-}
 const Form = () => {    
-    const {handleSubmit, reset, register, control } = useForm()
+    const {handleSubmit, reset, register, control } = useForm({
+        resolver: yupResolver(validationForm)
+    })
     
     const [dataCountries, setDataCountries] = useState([]);
     const [dataCities, setDataCities] = useState([]);
-
 
     useEffect(() => {
             axios.get("https://amazon-api.sellead.com/country")
@@ -97,8 +40,8 @@ const Form = () => {
 
                 setDataCountries(response.data)
             })
-            .catch(() => {
-                console.log("deu errado")
+            .catch((error) => {
+                console.log(error)
             })
 
             axios.get("https://amazon-api.sellead.com/city")
@@ -106,8 +49,8 @@ const Form = () => {
 
                 setDataCities(response.data)
             })
-            .catch(() => {  
-                console.log("deu errado")
+            .catch((error) => {  
+                console.log(error)
                 
             })
                   
@@ -118,7 +61,22 @@ const Form = () => {
 
     const citiesWithComplement = dataCities.map(item => item.name_ptbr).filter((onlyCities) => onlyCities).sort() // remove nulls
     const onlyCities = (citiesWithComplement.map(item => item.split(",")[0])).map(item => item.split("-")[0])
-    const citiesNoRep= [...new Set(onlyCities)]
+    const citiesWithNoRep= [...new Set(onlyCities)]
+
+
+    const optionCountries = countries.map(item => {
+        return {
+            value: item,
+            label: item
+        }   
+    })
+    
+    const optionCities = citiesWithNoRep.map(item => {
+        return {
+            value: item,
+            label: item
+        }   
+    })
 
         const onSubmit = (values) => {
 
@@ -126,9 +84,9 @@ const Form = () => {
 
             console.log(values)
 
-            reset();   
+            reset();          
 
-        }
+        }     
 
     return (
              
@@ -146,7 +104,8 @@ const Form = () => {
                                 {...register("name")}
                                 label="Nome Completo"
                                 variant="outlined"
-                                style={{marginBottom: 15}}                       
+                                style={{marginBottom: 15}}
+                                required                       
                             /> 
 
                             <TextField 
@@ -156,15 +115,17 @@ const Form = () => {
                                 label="Email"
                                 variant="outlined"   
                                 style={{marginBottom:15}}
+                                required
                             />
 
-                        
                             <Controller 
                                 name="phone"
                                 defaultValue=""
                                 control={control}
+                                rules={{required: true, minLength: 11, maxLength: 15}}
                                 render={({ field }) => (
                                     <MaskedInput
+                                        required
                                         id={"TextField"}
                                         innerRef={{...field}}
                                         type={"tel"}
@@ -181,8 +142,10 @@ const Form = () => {
                                 name="cpf"
                                 defaultValue=""
                                 control={control}
+                                rules={{required: true, minLength: 11, maxLength: 14}}
                                 render={({ field }) => (
                                     <MaskedInput
+                                        required
                                         id={"TextField"}
                                         innerRef={{...field}}
                                         type={"cpf"}
@@ -192,15 +155,14 @@ const Form = () => {
                                         label={"CPF"}
                                     />
                                 )}    
-                            />
-                      
+                            />             
          
                     </div>
 
                     <div id="secondBorderForm">
 
                             <h2 id="titleStyle">{`Quais são seus destinos de interesse? :)`}</h2>
-                            
+                                                      
                             <Controller 
                                 name="countries"
                                 control={control} 
@@ -209,21 +171,15 @@ const Form = () => {
                                     <Select 
                                         {...field}
                                         id="Select"
-                                        styles={styles}
+                                        styles={selectStyle}
                                         components = {animatedComponents}
                                         placeholder="Selecione os Países"
                                         isMulti
-                                        options={countries.map(item => {
-                                            return {
-                                                value: item,
-                                                label: item
-                                            }   
-                                        })}
-                                    
-                                    /> 
+                                        options={optionCountries}                                  
+                                    />  
                                 )} 
                             />
-                                
+                                           
                             <Controller
                                 name="cities"
                                 control={control}
@@ -232,21 +188,16 @@ const Form = () => {
                                     <Select  
                                         {...field}
                                         id="Select"                                          
-                                        styles={styles}
+                                        styles={selectStyle}
                                         components = {animatedComponents}
                                         placeholder="Selecione as Cidades"
                                         isMulti 
-                                        options={citiesNoRep.map(item => {
-                                            return {
-                                                value: item,
-                                                label: item
-                                            }
-                                        })}
+                                        options={optionCities}
                                     />  
                                 )}
                             />
 
-
+                        <div style={{display: "flex", justifyContent: "space-between"}}>
 
                             <Button 
                                 id="buttonSubmit"
@@ -255,19 +206,16 @@ const Form = () => {
                                 size="large"
                                 color="primary"
                                 type="submit"   
-                            >
-                            
+                            >           
                                 Enviar
-
                             </Button>
 
+                            <img alt="journey" id="destiny"src={destiny}/>
+                        </div>
+                    
                     </div> 
-
-
             </div>   
-
-            
-                
+       
         </form>
         
     )

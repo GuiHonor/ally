@@ -57,6 +57,7 @@
         border-left: 3px solid #0000ffba;
         border-radius: 0;        
     }
+    
     #secondBorderForm {
         margin-right: 0;   
         padding: 20px;
@@ -82,6 +83,7 @@
         font-size: 15px;
         margin-bottom: 30px;
     }
+   
 }
 
 @media (min-width: 768px) and (max-width: 819px) {
@@ -94,6 +96,7 @@
     #firstBorderForm {
         padding: 20px 65px;
     }
+
     #secondBorderForm {
         padding: 50px 65px;
     }
@@ -116,6 +119,7 @@
         display: flex;
         flex-direction: column;
     }
+
     #titleStyle {
         margin-bottom: 50px;
         margin-top: 20px ;
@@ -125,6 +129,7 @@
     #firstBorderForm {
         padding: 50px 93px;
     }
+
     #secondBorderForm {
         padding: 50px 93px;
     }
@@ -145,6 +150,7 @@
     #firstBorderForm {
         padding: 50px 65px;
     }
+
     #secondBorderForm {
         padding: 50px 65px;
     }
@@ -155,6 +161,7 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1366px) {
+
     #firstBorderForm {
         margin-right: 0;
         border: none;
@@ -163,9 +170,9 @@
         border-bottom: 3px solid #0000ffba;
         border-bottom-left-radius: 20px;        
     }
+
     #secondBorderForm {
-        margin-right: 0;   
-     
+        margin-right: 0;       
         border: none;
         border-bottom: 3px solid #0000ffba;
         border-right: 3px solid #0000ffba;
@@ -183,11 +190,31 @@
         position: relative;
         bottom: 150px;
     }
+
     #secondBorderForm{
         position: relative;
         bottom: 150px;
     }
+
     #TextField {
-        font-size: 20px;
+        font-size: 18px;
+    }
+    
+    #buttonSubmit {
+        
+        bottom: -90px;
+    }
+    
+    #destiny {
+        width: 90px;
+        height: 90px;
+        position: relative;
+        bottom: -40px;
+    }
+}
+
+@media (max-width: 1366px) {
+    #destiny {
+        display: none;
     }
 }

@@ -9,7 +9,6 @@
   
 }
 
-
 @media (min-width: 320px) and (max-width: 1024px) {
     
     #titleHeader {
@@ -18,13 +17,10 @@
     }
 }
 
-
-
 @media (min-width: 1024px) and (max-width: 1366px) {
     .App {
       height: 100vh;
     }
-
 }
 
 @media (min-width: 1366px) {
