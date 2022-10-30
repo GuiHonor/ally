@@ -1,18 +1,21 @@
 import { GlobalStyle } from './GlobalStyle';
 import './App.css';
 import Form from './Components/Form/Form';
+import Header from './Components/Header/Header';
 
 function App() {
   return (
-    
-    
-    <div className="App" style={{backgroundColor: 'white', height: "100vh", display: "flex", alignItems: "center"}}>
-      <GlobalStyle/>
-        <div style={{display: "flex", width: "100vw", justifyContent: "space-around"}}>
-          <Form></Form>
-        </div>
+    <>
+    <GlobalStyle/>
+    <div className="App">
+       
+        <Header/>
+       
+        <Form></Form>
+
     </div>
-   
+ 
+   </>
   );
 }
 

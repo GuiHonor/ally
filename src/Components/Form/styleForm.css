@@ -1,0 +1,193 @@
+#main {
+    display: flex;  
+}
+
+#firstBorderForm {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid #0000ff67; 
+    border-radius: 20px;
+    padding: 65px;
+    margin-right: 30px;
+}
+
+#secondBorderForm {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid #0000ff67; 
+    border-radius: 20px;
+    padding: 65px;
+    margin-right: 30px;
+}
+
+#titleStyle {
+    font-size: 35px; 
+    margin-bottom: 30px; 
+    letter-spacing: -4px; 
+    color: #0000ffba;
+    font-weight: normal;
+}
+
+#buttonSubmit {
+    width: 150px;
+    height: 45px; 
+    font-size: 17px; 
+    position: relative; 
+    bottom: -100px;
+}
+
+@media (min-width: 320px) and (max-width: 920px) {
+    
+    #main {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #TextField {
+        font-size: 18px;
+       
+    }
+
+    #firstBorderForm {
+        margin-right: 0;
+        padding: 20px  ;
+        border: none;
+        border-radius: 0;
+        border-right: 3px solid #0000ffba;
+        border-left: 3px solid #0000ffba;
+        border-radius: 0;        
+    }
+    #secondBorderForm {
+        margin-right: 0;   
+        padding: 20px;
+        border: none;
+        border-bottom: 3px solid #0000ffba;
+        border-right: 3px solid #0000ffba;
+        border-left: 3px solid #0000ffba;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        
+    }
+
+    #titleStyle {
+        font-size: 25px;
+        letter-spacing: 0;
+    }
+
+    #buttonSubmit {
+        width: 100px;
+        bottom: -10px;
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 819px) {
+    
+    #main {
+        display: flex;
+        flex-direction: column;
+    }
+   
+    #firstBorderForm {
+        padding: 20px 65px;
+    }
+    #secondBorderForm {
+        padding: 50px 65px;
+    }
+
+    #titleStyle {
+        margin-bottom: 40px;
+        margin-top: 20px ;
+        font-size: 30px;
+    }
+
+    #buttonSubmit {
+        margin-top: 30px;
+    }
+
+}
+
+@media (min-width: 820px) and (max-width: 1023px) {
+
+    #main {
+        display: flex;
+        flex-direction: column;
+    }
+    #titleStyle {
+        margin-bottom: 50px;
+        margin-top: 20px ;
+        font-size: 30px;
+    }
+
+    #firstBorderForm {
+        padding: 50px 93px;
+    }
+    #secondBorderForm {
+        padding: 50px 93px;
+    }
+
+    #buttonSubmit {
+        margin-top: 50px;
+        margin-bottom: 25px;
+    }
+}
+
+@media (min-width: 912px) {
+    
+    #TextField {
+        font-size: 25px;
+
+    }
+    
+    #firstBorderForm {
+        padding: 50px 65px;
+    }
+    #secondBorderForm {
+        padding: 50px 65px;
+    }
+
+    #buttonSubmit {
+        margin-bottom: 110px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+    #firstBorderForm {
+        margin-right: 0;
+        border: none;
+        border-radius: 0;
+        border-left: 3px solid #0000ffba;
+        border-bottom: 3px solid #0000ffba;
+        border-bottom-left-radius: 20px;        
+    }
+    #secondBorderForm {
+        margin-right: 0;   
+     
+        border: none;
+        border-bottom: 3px solid #0000ffba;
+        border-right: 3px solid #0000ffba;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 20px;
+        border-bottom-left-radius: 0px;
+        
+    }
+}
+
+@media (min-width: 1366px) {
+
+    #firstBorderForm{
+        position: relative;
+        bottom: 150px;
+    }
+    #secondBorderForm{
+        position: relative;
+        bottom: 150px;
+    }
+    #TextField {
+        font-size: 20px;
+    }
+}
